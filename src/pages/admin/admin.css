@@ -1,0 +1,15 @@
+.ant-modal-content {
+  @apply rounded-lg;
+}
+
+.ant-form-item-label {
+  @apply font-bold;
+}
+
+.ant-input {
+  @apply rounded-md;
+}
+
+.ant-btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600;
+}
