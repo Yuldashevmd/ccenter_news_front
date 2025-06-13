@@ -4,16 +4,17 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (email, password) => {
     try {
-      // Bypass API and generate pseudo-token
-      const pseudoToken = Math.random().toString(36).substring(2);
-      const pseudoUser = { email, name: email.split('@')[0] }; // Use email prefix as name
+      // Accept any email/password combination
+      if (!email || !password) {
+        throw new Error('Email and password are required');
+      }
+      const pseudoUser = { email, name: email.split('@')[0] };
       setUser(pseudoUser);
-      setToken(pseudoToken);
-      localStorage.setItem('token', pseudoToken);
+      setIsAuthenticated(true);
       return true;
     } catch (error) {
       console.error('Login failed:', error.message);
@@ -23,12 +24,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
+    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

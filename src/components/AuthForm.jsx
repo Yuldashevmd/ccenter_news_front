@@ -1,5 +1,5 @@
-import React from 'react';
-import { Form, Input, Button, Typography, Card } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Typography, Card, message } from 'antd';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,18 +8,23 @@ const { Title } = Typography;
 const AuthForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const onLogin = async (values) => {
+    setLoading(true);
     const success = await login(values.email, values.password);
     if (success) {
       navigate('/todos');
+    } else {
+      message.error('Please enter a valid email and password');
     }
+    setLoading(false);
   };
 
   return (
     <Card style={{ width: 400, margin: '100px auto', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
       <Title level={3} style={{ textAlign: 'center', color: '#1f2937' }}>
-        Login
+        Todo App
       </Title>
       <Form name="login" onFinish={onLogin} layout="vertical">
         <Form.Item
@@ -44,6 +49,7 @@ const AuthForm = () => {
             type="primary"
             htmlType="submit"
             block
+            loading={loading}
             className="bg-gradient-to-r from-blue-600 hover:from-blue-700 to-blue-800 hover:to-blue-900 rounded-lg"
           >
             Login
