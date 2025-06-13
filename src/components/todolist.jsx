@@ -285,7 +285,7 @@ const TodoList = () => {
   return (
     <div className="mx-auto mt-8 px-4 max-w-5xl">
       <Card
-        title={<Title level={2} className="font-bold text-gray-800 text-3xl">My Todo List</Title>}
+        title={<Title level={2} className="font-bold text-gray-800 text-3xl">CCenter News</Title>}
         className="bg-white shadow-xl rounded-xl"
         extra={
           <div className="flex items-center space-x-4">
@@ -395,7 +395,7 @@ const TodoList = () => {
       </Card>
 
       <Modal
-        title={<Title level={3} className="font-semibold text-gray-800 text-xl">Create New Todo</Title>}
+        title={<Title level={3} className="font-semibold text-gray-800 text-xl">Create New</Title>}
         open={isCreateModalVisible}
         onOk={handleCreate}
         onCancel={closeModals}
@@ -574,7 +574,7 @@ const TodoList = () => {
       </Modal>
 
       <Modal
-        title={<Title level={3} className="font-semibold text-gray-800 text-xl">Edit Todo</Title>}
+        title={<Title level={3} className="font-semibold text-gray-800 text-xl">Edit</Title>}
         open={isEditModalVisible}
         onOk={handleUpdate}
         onCancel={closeModals}
