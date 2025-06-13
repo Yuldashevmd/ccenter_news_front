@@ -362,7 +362,7 @@ const TodoList = () => {
                     <span className="font-medium">Label:</span> {todo.label[language] || 'No label'}
                   </Text>
                   <Text className="text-gray-500 text-sm">
-                    <span className="font-medium">Date:</span> {moment(todo.date).format('YYYY-MM-DD HH:mm')}
+                    <span className="font-medium">Date:</span> {moment(todo.date).format('YYYY-MM-DD')}
                   </Text>
                   {todo.image_link && todo.image_link.match(/\.(jpg|jpeg|png)$/i) && (
                     <div className="mt-2">
