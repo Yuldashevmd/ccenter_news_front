@@ -24,7 +24,7 @@ const AuthForm = () => {
   return (
     <Card style={{ width: 400, margin: '100px auto', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
       <Title level={3} style={{ textAlign: 'center', color: '#1f2937' }}>
-        Todo App
+        Ccenter News
       </Title>
       <Form name="login" onFinish={onLogin} layout="vertical">
         <Form.Item

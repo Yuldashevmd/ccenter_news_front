@@ -57,7 +57,7 @@ const TodoList = () => {
       const response = await api.getTodos();
       if (!response || !response.data || response.data.length === 0) {
         setTodos([]);
-        message.info("Ma'lumot yo'q");
+        message.info("Empty");
       } else {
         const todos = response.data.map(todo => ({
           ...todo,
@@ -66,9 +66,9 @@ const TodoList = () => {
         setTodos(todos);
       }
     } catch (error) {
-      console.error('Failed to fetch todos:', error.message, error.response?.data);
+      console.error('Failed to fetch news:', error.message, error.response?.data);
       setTodos([]);
-      message.info("Ma'lumot yo'q");
+      message.info("Empty");
     } finally {
       setLoading(false);
     }
@@ -210,11 +210,11 @@ const TodoList = () => {
         file: null,
       });
       setIsCreateModalVisible(false);
-      message.success('Todo created successfully');
+      message.success('News created successfully');
       await fetchTodos();
     } catch (error) {
-      console.error('Failed to create todo:', error.message, error.response?.data);
-      message.error('Failed to create todo');
+      console.error('Failed to create mews:', error.message, error.response?.data);
+      message.error('Failed to create mews');
     }
   };
   const isValidUploadResponse = (response) => {
@@ -227,11 +227,11 @@ const TodoList = () => {
       await api.updateTodo(editingTodo.id, editForm);
       setIsEditModalVisible(false);
       setEditingTodo(null);
-      message.success('Todo edited successfully');
+      message.success('News edited successfully');
       await fetchTodos();
     } catch (error) {
-      console.error('Failed to update todo:', error.message, error.response?.data);
-      message.error('Failed to update todo');
+      console.error('Failed to update news:', error.message, error.response?.data);
+      message.error('Failed to update news');
     }
   };
 
@@ -240,11 +240,11 @@ const TodoList = () => {
       await api.deleteTodo(deletingTodoId);
       setIsDeleteModalVisible(false);
       setDeletingTodoId(null);
-      message.success('Todo deleted successfully');
+      message.success('News deleted successfully');
       await fetchTodos();
     } catch (error) {
-      console.error('Failed to delete todo:', error.message, error.response?.data);
-      message.error('Failed to delete todo');
+      console.error('Failed to delete news:', error.message, error.response?.data);
+      message.error('Failed to delete news');
     }
   };
 
@@ -311,7 +311,7 @@ const TodoList = () => {
   return (
     <div className="mx-auto mt-8 px-4 max-w-5xl">
       <Card
-        title={<Title level={2} className="font-bold text-gray-800 text-3xl">CCenter News</Title>}
+        title={<Title level={2} className="font-bold text-gray-800 text-3xl">Ccenter News</Title>}
         className="bg-white shadow-xl rounded-xl"
         extra={
           <div className="flex items-center space-x-4">
@@ -331,16 +331,16 @@ const TodoList = () => {
               icon={<PlusOutlined />}
               onClick={openCreateModal}
               className="bg-gradient-to-r from-blue-600 hover:from-blue-700 to-blue-800 hover:to-blue-900 shadow-md rounded-lg font-semibold text-white"
-              aria-label="Add new todo"
+              aria-label="Add new news"
             >
-              Add Todo
+              Add News
             </Button>
           </div>
         }
       >
         {todos.length === 0 ? (
           <Empty
-            description="No todos found. Create your first todo!"
+            description="No newss found. Create your first news!"
             className="py-8"
           />
         ) : (
@@ -401,7 +401,7 @@ const TodoList = () => {
                     icon={<EditOutlined />}
                     onClick={() => openEditModal(todo)}
                     className="border-blue-600 hover:border-blue-800 rounded-lg font-medium text-blue-600 hover:text-blue-800"
-                    aria-label="Edit todo"
+                    aria-label="Edit news"
                   >
                     Edit
                   </Button>
@@ -409,7 +409,7 @@ const TodoList = () => {
                     icon={<DeleteOutlined />}
                     onClick={() => openDeleteModal(todo.id)}
                     className="border-red-600 hover:border-red-800 rounded-lg font-medium text-red-600 hover:text-red-800"
-                    aria-label="Delete todo"
+                    aria-label="Delete news"
                   >
                     Delete
                   </Button>
@@ -441,7 +441,7 @@ const TodoList = () => {
               value={newTodo.title.en}
               onChange={(e) => setNewTodo({ ...newTodo, title: { ...newTodo.title, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title English"
+              aria-label="News title English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="title.ru">
@@ -450,7 +450,7 @@ const TodoList = () => {
               value={newTodo.title.ru}
               onChange={(e) => setNewTodo({ ...newTodo, title: { ...newTodo.title, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title Russian"
+              aria-label="News title Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="title.uz">
@@ -459,7 +459,7 @@ const TodoList = () => {
               value={newTodo.title.uz}
               onChange={(e) => setNewTodo({ ...newTodo, title: { ...newTodo.title, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title Uzbek"
+              aria-label="News title Uzbek"
             />
           </Form.Item>
 
@@ -472,7 +472,7 @@ const TodoList = () => {
               value={newTodo.text.en}
               onChange={(e) => setNewTodo({ ...newTodo, text: { ...newTodo.text, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text English"
+              aria-label="News text English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="text.ru">
@@ -481,7 +481,7 @@ const TodoList = () => {
               value={newTodo.text.ru}
               onChange={(e) => setNewTodo({ ...newTodo, text: { ...newTodo.text, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text Russian"
+              aria-label="News text Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="text.uz">
@@ -490,7 +490,7 @@ const TodoList = () => {
               value={newTodo.text.uz}
               onChange={(e) => setNewTodo({ ...newTodo, text: { ...newTodo.text, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text Uzbek"
+              aria-label="News text Uzbek"
             />
           </Form.Item>
 
@@ -503,7 +503,7 @@ const TodoList = () => {
               value={newTodo.label.en}
               onChange={(e) => setNewTodo({ ...newTodo, label: { ...newTodo.label, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label English"
+              aria-label="News label English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="label.ru">
@@ -512,7 +512,7 @@ const TodoList = () => {
               value={newTodo.label.ru}
               onChange={(e) => setNewTodo({ ...newTodo, label: { ...newTodo.label, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label Russian"
+              aria-label="News label Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="label.uz">
@@ -521,7 +521,7 @@ const TodoList = () => {
               value={newTodo.label.uz}
               onChange={(e) => setNewTodo({ ...newTodo, label: { ...newTodo.label, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label Uzbek"
+              aria-label="News label Uzbek"
             />
           </Form.Item>
 
@@ -534,7 +534,7 @@ const TodoList = () => {
               value={newTodo.date}
               onChange={(e) => setNewTodo({ ...newTodo, date: e.target.value })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo date"
+              aria-label="News date"
             />
           </Form.Item>
           <Form.Item label="File Link (Manual)" name="file_link">
@@ -543,7 +543,7 @@ const TodoList = () => {
               value={newTodo.file_link}
               onChange={(e) => setNewTodo({ ...newTodo, file_link: e.target.value })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo file link"
+              aria-label="News file link"
             />
           </Form.Item>
           <Form.Item label="Upload Image" name="image">
@@ -620,7 +620,7 @@ const TodoList = () => {
               value={editForm.title.en}
               onChange={(e) => setEditForm({ ...editForm, title: { ...editForm.title, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title English"
+              aria-label="News title English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="title.ru">
@@ -629,7 +629,7 @@ const TodoList = () => {
               value={editForm.title.ru}
               onChange={(e) => setEditForm({ ...editForm, title: { ...editForm.title, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title Russian"
+              aria-label="News title Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="title.uz">
@@ -638,7 +638,7 @@ const TodoList = () => {
               value={editForm.title.uz}
               onChange={(e) => setEditForm({ ...editForm, title: { ...editForm.title, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo title Uzbek"
+              aria-label="News title Uzbek"
             />
           </Form.Item>
 
@@ -651,7 +651,7 @@ const TodoList = () => {
               value={editForm.text.en}
               onChange={(e) => setEditForm({ ...editForm, text: { ...editForm.text, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text English"
+              aria-label="News text English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="text.ru">
@@ -660,7 +660,7 @@ const TodoList = () => {
               value={editForm.text.ru}
               onChange={(e) => setEditForm({ ...editForm, text: { ...editForm.text, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text Russian"
+              aria-label="News text Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="text.uz">
@@ -669,7 +669,7 @@ const TodoList = () => {
               value={editForm.text.uz}
               onChange={(e) => setEditForm({ ...editForm, text: { ...editForm.text, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo text Uzbek"
+              aria-label="News text Uzbek"
             />
           </Form.Item>
 
@@ -682,7 +682,7 @@ const TodoList = () => {
               value={editForm.label.en}
               onChange={(e) => setEditForm({ ...editForm, label: { ...editForm.label, en: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label English"
+              aria-label="News label English"
             />
           </Form.Item>
           <Form.Item label="Русский" name="label.ru">
@@ -691,7 +691,7 @@ const TodoList = () => {
               value={editForm.label.ru}
               onChange={(e) => setEditForm({ ...editForm, label: { ...editForm.label, ru: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label Russian"
+              aria-label="News label Russian"
             />
           </Form.Item>
           <Form.Item label="Uzbek" name="label.uz">
@@ -700,7 +700,7 @@ const TodoList = () => {
               value={editForm.label.uz}
               onChange={(e) => setEditForm({ ...editForm, label: { ...editForm.label, uz: e.target.value } })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo label Uzbek"
+              aria-label="News label Uzbek"
             />
           </Form.Item>
 
@@ -713,7 +713,7 @@ const TodoList = () => {
               value={editForm.date}
               onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo date"
+              aria-label="News date"
             />
           </Form.Item>
           <Form.Item label="File Link (Manual)" name="file_link">
@@ -722,7 +722,7 @@ const TodoList = () => {
               value={editForm.file_link}
               onChange={(e) => setEditForm({ ...editForm, file_link: e.target.value })}
               className="border-gray-300 focus:border-blue-500 rounded-lg"
-              aria-label="Todo file link"
+              aria-label="News file link"
             />
           </Form.Item>
           <Form.Item label="Upload Image" name="image">
@@ -779,7 +779,7 @@ const TodoList = () => {
         cancelButtonProps={{ className: 'bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg' }}
         className="rounded-xl"
       >
-        <p className="text-gray-700">Are you sure you want to delete this todo?</p>
+        <p className="text-gray-700">Are you sure you want to delete this news?</p>
       </Modal>
     </div>
   );
