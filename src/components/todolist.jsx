@@ -379,9 +379,9 @@ const TodoList = () => {
                   )}
                   {todo.file_link && (
                     <div className="flex items-center space-x-2 mt-2">
-                      <span className="text-gray-600 text-sm">
+                      {/* <span className="text-gray-600 text-sm">
                         {getFileIcon(todo.file_link)} {todo.file_link.split('/').pop() || 'Attached File'}
-                      </span>
+                      </span> */}
                       <Button
                         type="link"
                         href={todo.file_link}
