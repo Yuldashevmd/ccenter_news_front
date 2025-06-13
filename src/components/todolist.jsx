@@ -78,8 +78,12 @@ const TodoList = () => {
     if (!file) return null;
     try {
       setUploading(true);
-      const response = await api.uploadImage(file); // Ehtimol { url: "..." } qaytaradi
-      const url = response.url || response; // Agar obyekt bo'lsa url ni olish, aks holda to'g'ridan-to'g'ri url
+      const response = await api.uploadImage(file);
+      // Properly access the Url property from the response
+      const url = response?.data?.Url || response?.Url;
+      if (!url) {
+        throw new Error('No URL returned from server');
+      }
       return url;
     } catch (error) {
       console.error('Image upload error:', error.message, error.response?.data);
@@ -89,12 +93,17 @@ const TodoList = () => {
       setUploading(false);
     }
   };
-
+  
   const handleUploadFile = async (file) => {
     if (!file) return null;
     try {
       setUploading(true);
-      const url = await api.uploadFile(file);
+      const response = await api.uploadFile(file);
+      // Properly access the Url property from the response
+      const url = response?.data?.Url || response?.Url;
+      if (!url) {
+        throw new Error('No URL returned from server');
+      }
       return url;
     } catch (error) {
       console.error('File upload error:', error.message, error.response?.data);
@@ -110,17 +119,30 @@ const TodoList = () => {
       setNewTodo({ ...newTodo, imageFile: null, image_link: '' });
       return;
     }
+    
     if (!beforeUploadImage(file)) {
       return;
     }
-    setNewTodo({ ...newTodo, imageFile: file });
-    const imageLink = await handleUploadImage(file);
-    if (imageLink) {
-      setNewTodo({ ...newTodo, image_link: imageLink.toString() }); // URL ni string sifatida saqlash
-      message.success('Image uploaded successfully');
+    
+    try {
+      setNewTodo({ ...newTodo, imageFile: file });
+      const imageLink = await handleUploadImage(file);
+      if (imageLink) {
+        setNewTodo(prev => ({
+          ...prev,
+          image_link: imageLink.toString()
+        }));
+        message.success('Image uploaded successfully');
+      }
+    } catch (error) {
+      message.error('Image upload failed');
+      setNewTodo(prev => ({
+        ...prev,
+        imageFile: null,
+        image_link: ''
+      }));
     }
   };
-
   const handleEditImageChange = async ({ file }) => {
     if (file.status === 'removed') {
       setEditForm({ ...editForm, imageFile: null, image_link: '' });
@@ -195,7 +217,11 @@ const TodoList = () => {
       message.error('Failed to create todo');
     }
   };
-
+  const isValidUploadResponse = (response) => {
+    return response && 
+           (response.data?.Url || response.Url) && 
+           typeof (response.data?.Url || response.Url) === 'string';
+  };
   const handleUpdate = async () => {
     try {
       await api.updateTodo(editingTodo.id, editForm);

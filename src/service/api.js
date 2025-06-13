@@ -41,36 +41,38 @@ export default {
   async uploadImage(file) {
     try {
       const formData = new FormData();
-      formData.append('file', file, { contentType: file.type }); // Match Swagger's 'file' and add MIME type
-      const response = await api.post('/img-upload', formData); // Remove manual Content-Type header
-      return response.data.Url;
+      formData.append('file', file);
+      
+      const response = await api.post('/img-upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      // Return the full response to be handled by the calling function
+      return response;
     } catch (error) {
       console.error('Image upload error:', error.response?.data || error.message);
       throw error;
     }
   },
-
+  
   async uploadFile(file) {
     try {
-      // Fayl hajmini tekshirish (masalan, 5MB dan kichik bo'lishi kerak)
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSize) {
-        throw new Error('File size must be less than 5MB');
-      }
-  
-      // Qo'llab-quvvatlanadigan fayl tiplarini tekshirish
-      const supportedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
-      if (!supportedTypes.includes(file.type)) {
-        throw new Error('Unsupported file type. Please upload PDF, DOC, DOCX, or TXT files.');
-      }
-  
       const formData = new FormData();
-      formData.append('file', file, { contentType: file.type }); // Swaggerga mos field nomi va MIME type
-      const response = await api.post('/img-upload', formData); // Avtomatik Content-Type bilan
-      return response.data.Url; // file_link sifatida qaytariladi
+      formData.append('file', file);
+      
+      const response = await api.post('/img-upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      
+      // Return the full response to be handled by the calling function
+      return response;
     } catch (error) {
       console.error('File upload error:', error.response?.data || error.message);
       throw error;
     }
-  },
+  }
 };
