@@ -10,10 +10,11 @@ const columns = [
 
 interface IProps {
   rows: any[];
+  onDelete: (id: number) => void;
 }
 
 export const DashboardTable: FC<IProps> = (props) => {
-  const { rows } = props;
+  const { rows,onDelete } = props;
 
   return (
     <table className="table w-full border border-gray-200">
@@ -38,7 +39,7 @@ export const DashboardTable: FC<IProps> = (props) => {
                 <Pencil className="inline w-5 h-5 text-orange-400 cursor-table" />
               </span>
               <span className="text-red-600 hover:underline ml-2" title="Delete">
-                <Trash className="inline w-5 h-5 text-red-400 cursor-table" />
+                <Trash className="inline w-5 h-5 text-red-400 cursor-table" onClick={()=>onDelete(row.id)}/>
               </span>
               <span className="text-green-600 hover:underline ml-2" title="View">
                 <View className="inline w-5 h-5 text-blue-400 cursor-table" />

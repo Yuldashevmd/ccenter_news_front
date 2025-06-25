@@ -10,18 +10,27 @@ const api = axios.create({
 
 // 🔐 Type-safe API
 export const baseApi = {
-  async createTodo(data: CreateTodoDto): Promise<Todo> {
+  async createTodo(data: CreateTodoDto): Promise<{status:number;data:Todo}> {
     const response = await api.post<Todo>('/news/create', data);
-    return response.data;
+    return response;
   },
 
-  async deleteTodo(id: number): Promise<void> {
-    await api.delete(`/news/delete?id=${id}`);
+  async deleteTodo(id: number): Promise<{status:number;data:Todo}> {
+  const response=  await api.delete(`/news/delete?id=${id}`);
+
+  return response;
   },
 
-  async getTodos(): Promise<Todo[]> {
-    const response = await api.get<{ banners: Todo[] }>('/news/list');
-    return response.data.banners;
+  async getTodos(params: { limit: number }): Promise<{ status: number; data: { banners: Todo[]; count: number } }> {
+    const response = await api.get<{ banners: Todo[]; count: number }>('/news/list', { params });
+
+    return {
+      status: response.status,
+      data: {
+        banners: response.data.banners,
+        count: response.data.count
+      }
+    };
   },
 
   async updateTodo(id: number, data: UpdateTodoDto): Promise<Todo> {
