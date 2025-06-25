@@ -42,13 +42,13 @@ export default {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const response = await api.post('/img-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+
       // Return the full response to be handled by the calling function
       return response;
     } catch (error) {
@@ -56,18 +56,18 @@ export default {
       throw error;
     }
   },
-  
+
   async uploadFile(file) {
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       const response = await api.post('/img-upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+
       // Return the full response to be handled by the calling function
       return response;
     } catch (error) {
