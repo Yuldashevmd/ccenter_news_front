@@ -1,6 +1,7 @@
 import { AddNewsButton } from 'features/add-news-button';
 import { Pagination } from 'features/pagination';
 import { useState } from 'react';
+import { baseApi } from 'shared/api';
 import { ModalData, useDisclosure } from 'shared/services';
 import { DashboardTable } from 'widgets/dashboard-table';
 import { Modal } from 'widgets/modal';
@@ -14,13 +15,16 @@ export const DashboardPage = () => {
   const { isOpen, open, close } = useDisclosure();
   const [limit, setLimit] = useState<number>(10);
   const [isLoading, setIsLoading] = useState(false);
+  const {createTodo}= baseApi;
 
   const onLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
   };
 
-  const handleSubmit = (data:ModalData) => {
+  const handleSubmit = async (data:ModalData) => {
     console.log(data, 'data');
+
+    await createTodo(data);
   };
 
   return (

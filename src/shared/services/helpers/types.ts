@@ -16,3 +16,15 @@ export interface ModalData {
   title: Multilang;
   type: string;
 }
+
+export interface Todo extends ModalData {
+  id: number;
+}
+
+export interface CreateTodoDto extends Omit<Todo, 'id'> {}
+export interface UpdateTodoDto extends Partial<CreateTodoDto> {}
+
+export interface UploadResponse {
+  url: string;
+  name?: string;
+}

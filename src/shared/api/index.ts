@@ -1,78 +1,54 @@
 import axios from 'axios';
+import { CreateTodoDto, Todo, UpdateTodoDto, UploadResponse } from 'shared/services';
 
-const API_BASE_URL = 'http://35.154.102.246:5050';
+
+const API_BASE_URL = import.meta.env.VITE_APP_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-export default {
-  async createTodo(data) {
-    return api.post('/news/create', {
-      date: data.date,
-      file_link: data.file_link,
-      img_url: data.image_link,
-      label: data.label,
-      text: data.text,
-      title: data.title,
+// 🔐 Type-safe API
+export const baseApi = {
+  async createTodo(data: CreateTodoDto): Promise<Todo> {
+    const response = await api.post<Todo>('/news/create', data);
+    return response.data;
+  },
+
+  async deleteTodo(id: number): Promise<void> {
+    await api.delete(`/news/delete?id=${id}`);
+  },
+
+  async getTodos(): Promise<Todo[]> {
+    const response = await api.get<{ banners: Todo[] }>('/news/list');
+    return response.data.banners;
+  },
+
+  async updateTodo(id: number, data: UpdateTodoDto): Promise<Todo> {
+    const response = await api.put<Todo>(`/news/update?id=${id}`, data);
+    return response.data;
+  },
+
+  async uploadImage(file: File): Promise<UploadResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await api.post<UploadResponse>('/img-upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
     });
+
+    return response.data;
   },
 
-  async deleteTodo(id) {
-    return api.delete(`/news/delete?id=${id}`);
-  },
+  async uploadFile(file: File): Promise<UploadResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
 
-  async getTodos() {
-    const response = await api.get('/news/list');
-    return { data: response.data.banners };
-  },
-
-  async updateTodo(id, data) {
-    return api.put(`/news/update?id=${id}`, {
-      date: data.date,
-      file_link: data.file_link,
-      img_url: data.image_link,
-      label: data.label,
-      text: data.text,
-      title: data.title,
+    const response = await api.post<UploadResponse>('/img-upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
     });
-  },
 
-  async uploadImage(file) {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await api.post('/img-upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      // Return the full response to be handled by the calling function
-      return response;
-    } catch (error) {
-      console.error('Image upload error:', error.response?.data || error.message);
-      throw error;
-    }
-  },
-
-  async uploadFile(file) {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await api.post('/img-upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      // Return the full response to be handled by the calling function
-      return response;
-    } catch (error) {
-      console.error('File upload error:', error.response?.data || error.message);
-      throw error;
-    }
+    return response.data;
   }
 };
+
