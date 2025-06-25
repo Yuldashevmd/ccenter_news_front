@@ -1,20 +1,29 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { setLocalStorageItem } from 'shared/services';
+
+const baseEmail = import.meta.env.VITE_APP_EMAIL || "";
+const basePassword = import.meta.env.VITE_APP_PASSWORD || "";
+
 
 export const LoginPage = () => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const onLogin = (e) => {
+
+  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const email = formData.get('email');
     const password = formData.get('password');
-
-    // Bu yerga autentifikatsiya logikasini yozing
-    console.log({ email, password });
-
-    setTimeout(() => setLoading(false), 2000);
+    if(baseEmail == email && basePassword == password) {
+      setLocalStorageItem("isAuth", true);
+      setLocalStorageItem("user", { email, password });
+      setTimeout(() => setLoading(false), 2000);
+      navigate('/');
+    }
   };
   return (
     <main className="w-full h-screen bg-gradient-to-r from-blue-100 to-blue-300 flex items-center justify-center">
