@@ -30,9 +30,9 @@ export const DashboardTable: FC<IProps> = (props) => {
         {/* Example row, replace with dynamic data */}
         {rows.map((row) => (
           <tr key={row.id} className="hover:bg-gray-50 cursor-pointer">
-            <td className="px-4 py-2">{row.title}</td>
-            <td className="px-4 py-2">{row.type}</td>
-            <td className="px-4 py-2">{row.date}</td>
+            <td className="px-4 py-2">{row?.title?.uz}</td>
+            <td className="px-4 py-2">{row?.type}</td>
+            <td className="px-4 py-2">{row?.date}</td>
             <td className="px-4 py-2">
               <span className="text-blue-600 hover:underline" title="Edit">
                 <Pencil className="inline w-5 h-5 text-orange-400 cursor-table" />
