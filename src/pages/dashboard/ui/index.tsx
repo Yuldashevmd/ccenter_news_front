@@ -1,7 +1,7 @@
 import { AddNewsButton } from 'features/add-news-button';
 import { Pagination } from 'features/pagination';
 import { useState } from 'react';
-import { useDisclosure } from 'shared/services';
+import { ModalData, useDisclosure } from 'shared/services';
 import { DashboardTable } from 'widgets/dashboard-table';
 import { Modal } from 'widgets/modal';
 
@@ -19,7 +19,7 @@ export const DashboardPage = () => {
     setLimit(Number(e.target.value));
   };
 
-  const handleSubmit = (data) => {
+  const handleSubmit = (data:ModalData) => {
     console.log(data, 'data');
   };
 

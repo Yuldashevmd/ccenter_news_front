@@ -1,24 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-
-type LangType = 'en' | 'ru' | 'uz';
-
-interface Multilang {
-  en: string;
-  ru: string;
-  uz: string;
-}
-
-interface ModalData {
-  date: string;
-  file_link: string;
-  href_name: string;
-  img_url: string;
-  label: Multilang;
-  text: Multilang;
-  title: Multilang;
-  type: string;
-}
+import { LangType, ModalData } from 'shared/services';
 
 interface Props {
   isOpen: boolean;
@@ -29,6 +11,8 @@ interface Props {
 }
 
 export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loading }) => {
+  const overlayRef = useRef<HTMLDivElement>(null);
+
   const [formData, setFormData] = useState<ModalData>({
     date: '',
     file_link: '',
@@ -40,15 +24,40 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
     type: '',
   });
 
+  // ESC tugmasi bilan yopish
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [isOpen]);
+
   useEffect(() => {
     if (data) setFormData(data);
-  }, [data]);
+    else {
+      setFormData({
+        date: '',
+        file_link: '',
+        href_name: '',
+        img_url: '',
+        label: { en: '', ru: '', uz: '' },
+        text: { en: '', ru: '', uz: '' },
+        title: { en: '', ru: '', uz: '' },
+        type: '',
+      });
+    }
+  }, [data, isOpen]);
 
-  const handleChange = (field: keyof ModalData, value: any) => {
+  const handleChange = (field: keyof ModalData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleMultilangChange = (field: keyof Pick<ModalData, 'label' | 'text' | 'title'>, lang: LangType, value: string) => {
+  const handleMultilangChange = (
+    field: keyof Pick<ModalData, 'label' | 'text' | 'title'>,
+    lang: LangType,
+    value: string
+  ) => {
     setFormData(prev => ({
       ...prev,
       [field]: {
@@ -58,78 +67,83 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
     }));
   };
 
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === overlayRef.current) onClose();
+  };
+
   const handleSubmit = () => {
-    if (!formData.title.uz || !formData.type) return alert('Majburiy maydonlar to‘ldirilishi kerak!');
+    if (!formData.title.uz || !formData.type) {
+      alert('Majburiy maydonlar to‘ldirilishi kerak!');
+      return;
+    }
     onSubmit(formData);
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 space-y-6">
-        <h2 className="text-xl font-semibold">
+    <div
+      ref={overlayRef}
+      onClick={handleOverlayClick}
+      className="fixed inset-0 z-[1000] bg-black/50 flex items-center justify-center px-4"
+    >
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-400 hover:text-black text-2xl leading-none"
+          aria-label="Yopish"
+        >
+          ×
+        </button>
+
+        {/* Header */}
+        <h2 className="text-xl font-semibold mb-4">
           {data ? 'Tahrirlash' : 'Yaratish'} shakli
         </h2>
 
+        {/* Inputlar */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            placeholder="Sana (date)"
-            value={formData.date}
-            onChange={e => handleChange('date', e.target.value)}
-            className="input"
-          />
-          <input
-            type="text"
-            placeholder="Type *"
-            required
-            value={formData.type}
-            onChange={e => handleChange('type', e.target.value)}
-            className="input"
-          />
-          <input
-            type="text"
-            placeholder="File link"
-            value={formData.file_link}
-            onChange={e => handleChange('file_link', e.target.value)}
-            className="input"
-          />
-          <input
-            type="text"
-            placeholder="Href name"
-            value={formData.href_name}
-            onChange={e => handleChange('href_name', e.target.value)}
-            className="input"
-          />
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={formData.img_url}
-            onChange={e => handleChange('img_url', e.target.value)}
-            className="input"
-          />
+          {[
+            { label: 'Sana (date)', field: 'date' },
+            { label: 'Type *', field: 'type' },
+            { label: 'File link', field: 'file_link' },
+            { label: 'Href name', field: 'href_name' },
+            { label: 'Image URL', field: 'img_url' },
+          ].map(({ label, field }) => (
+            <input
+              key={field}
+              type="text"
+              required={label.includes('*')}
+              placeholder={label}
+              value={(formData as any)[field]}
+              onChange={e => handleChange(field as keyof ModalData, e.target.value)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          ))}
         </div>
 
-        {['label', 'text', 'title'].map(field => (
-          <div key={field}>
-            <h4 className="text-sm font-medium capitalize">{field}</h4>
+        {/* Multilang inputlar */}
+        {(['label', 'text', 'title'] as const).map(field => (
+          <div key={field} className="mt-5">
+            <label className="block text-sm font-medium capitalize mb-1">{field}</label>
             <div className="grid grid-cols-3 gap-2">
               {(['uz', 'ru', 'en'] as LangType[]).map(lang => (
                 <input
                   key={lang}
                   type="text"
                   placeholder={`${field} (${lang})`}
-                  value={(formData as any)[field][lang]}
-                  onChange={e => handleMultilangChange(field as any, lang, e.target.value)}
-                  className="input"
+                  value={formData[field][lang]}
+                  onChange={e => handleMultilangChange(field, lang, e.target.value)}
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 />
               ))}
             </div>
           </div>
         ))}
 
-        <div className="flex justify-end gap-3">
+        {/* Actions */}
+        <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
             className="px-4 py-2 text-sm rounded-md border border-gray-300 hover:bg-gray-100"
@@ -151,4 +165,3 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
     </div>
   );
 };
-
