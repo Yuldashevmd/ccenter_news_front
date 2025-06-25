@@ -1,4 +1,5 @@
 import { AddNewsButton } from 'features/add-news-button';
+import { Pagination } from 'features/pagination';
 import { DashboardTable } from 'widgets/dashboard-table';
 
 export const DashboardPage = () => {
@@ -12,6 +13,7 @@ export const DashboardPage = () => {
       </div>
       <AddNewsButton />
       <DashboardTable />
+      <Pagination total={0}/>
     </main>
   );
 };

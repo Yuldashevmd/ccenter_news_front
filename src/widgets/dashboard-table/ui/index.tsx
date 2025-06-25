@@ -33,15 +33,15 @@ export const DashboardTable = () => {
             <td className="px-4 py-2">{row.type}</td>
             <td className="px-4 py-2">{row.date}</td>
             <td className="px-4 py-2">
-              <button className="text-blue-600 hover:underline">
-                <Pencil className="inline w-5 h-5 text-orange-400" />
-              </button>
-              <button className="text-red-600 hover:underline ml-2">
-                <Trash className="inline w-5 h-5 text-red-400" />
-              </button>
-              <button className="text-green-600 hover:underline ml-2">
-                <View className="inline w-5 h-5 text-blue-400" />
-              </button>
+              <span className="text-blue-600 hover:underline" title='Edit'>
+                <Pencil className="inline w-5 h-5 text-orange-400 cursor-table" />
+              </span>
+              <span className="text-red-600 hover:underline ml-2" title='Delete'>
+                <Trash className="inline w-5 h-5 text-red-400 cursor-table" />
+              </span>
+              <span className="text-green-600 hover:underline ml-2" title='View'>
+                <View className="inline w-5 h-5 text-blue-400 cursor-table" />
+              </span>
             </td>
           </tr>
         ))}
