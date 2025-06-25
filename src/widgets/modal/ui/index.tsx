@@ -50,15 +50,15 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
   }, [data, isOpen]);
 
   const handleChange = (field: keyof ModalData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleMultilangChange = (
     field: keyof Pick<ModalData, 'label' | 'text' | 'title'>,
     lang: LangType,
-    value: string
+    value: string,
   ) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: {
         ...prev[field],
@@ -98,9 +98,7 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
         </button>
 
         {/* Header */}
-        <h2 className="text-xl font-semibold mb-4">
-          {data ? 'Tahrirlash' : 'Yaratish'} shakli
-        </h2>
+        <h2 className="text-xl font-semibold mb-4">{data ? 'Tahrirlash' : 'Yaratish'} shakli</h2>
 
         {/* Inputlar */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -113,30 +111,40 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
           ].map(({ label, field }) => (
             <input
               key={field}
-              type="text"
+              type={field === 'date' ? 'date' : 'text'}
               required={label.includes('*')}
               placeholder={label}
               value={(formData as any)[field]}
-              onChange={e => handleChange(field as keyof ModalData, e.target.value)}
+              onChange={(e) => handleChange(field as keyof ModalData, e.target.value)}
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           ))}
         </div>
 
         {/* Multilang inputlar */}
-        {(['label', 'text', 'title'] as const).map(field => (
+        {(['label', 'title', 'text'] as const).map((field) => (
           <div key={field} className="mt-5">
             <label className="block text-sm font-medium capitalize mb-1">{field}</label>
             <div className="grid grid-cols-3 gap-2">
-              {(['uz', 'ru', 'en'] as LangType[]).map(lang => (
-                <input
-                  key={lang}
-                  type="text"
-                  placeholder={`${field} (${lang})`}
-                  value={formData[field][lang]}
-                  onChange={e => handleMultilangChange(field, lang, e.target.value)}
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
+              {(['uz', 'ru', 'en'] as LangType[]).map((lang) => (
+                field === 'text' ? (
+                  <textarea
+                    key={lang}
+                    placeholder={`${field} (${lang})`}
+                    value={formData[field][lang]}
+                    onChange={(e) => handleMultilangChange(field, lang, e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                ) : (
+                  <input
+                    key={lang}
+                    type="text"
+                    placeholder={`${field} (${lang})`}
+                    value={formData[field][lang]}
+                    onChange={(e) => handleMultilangChange(field, lang, e.target.value)}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  />
+                )
               ))}
             </div>
           </div>
@@ -155,7 +163,7 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
             disabled={loading}
             className={classNames(
               'px-4 py-2 text-sm rounded-md text-white',
-              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700',
             )}
           >
             {loading ? 'Saqlanmoqda...' : data ? 'Yangilash' : 'Yaratish'}
