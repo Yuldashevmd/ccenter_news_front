@@ -14,10 +14,17 @@ export const DashboardPage = () => {
   const { createTodo, getTodos, deleteTodo } = baseApi;
 
   const GET_ALL = async (params: { limit: number }) => {
-    const res = await getTodos(params);
-    if (res.status === 200) {
-      setData(res.data?.banners);
-      setTotal(res.data?.count);
+    try {
+      setIsLoading(true);
+      const res = await getTodos(params);
+      if (res.status === 200) {
+        setData(res.data?.banners);
+        setTotal(res.data?.count);
+      }
+    } catch (e) {
+      console.log(e, 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -26,19 +33,25 @@ export const DashboardPage = () => {
   };
 
   const onDelete = async (id: number) => {
-    const res =await deleteTodo(id);
-    if (res.status === 200){
-      await GET_ALL({ limit });
+    try {
+      const res = await deleteTodo(id);
+      if (res.status === 200) {
+        await GET_ALL({ limit });
+      }
+    } catch (e) {
+      console.log(e, 'error');
     }
   };
 
   const handleSubmit = async (data: ModalData) => {
-    setIsLoading(true);
-    const res = await createTodo(data);
-    if (res.status === 200) {
-      setIsLoading(false);
-      close();
-      await GET_ALL({ limit });
+    try {
+      const res = await createTodo(data);
+      if (res.status === 200) {
+        close();
+        await GET_ALL({ limit });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -55,7 +68,7 @@ export const DashboardPage = () => {
         </p>
       </div>
       <AddNewsButton open={open} />
-      <DashboardTable rows={data} onDelete={onDelete} />
+      <DashboardTable rows={data} onDelete={onDelete} loading={isLoading} />
       <Pagination total={total} limit={limit} onChange={onLimitChange} />
 
       <Modal isOpen={isOpen} onClose={close} onSubmit={handleSubmit} loading={isLoading} />
