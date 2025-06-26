@@ -10,7 +10,7 @@ const columns = [
 ];
 
 interface IProps {
-  rows: any[];
+  rows: any[] | [];
   onDelete: (id: number) => void;
   loading?: boolean;
   setEditedData: React.Dispatch<React.SetStateAction<undefined | Todo>>;
@@ -32,6 +32,13 @@ export const DashboardTable: FC<IProps> = (props) => {
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-200">
+        {rows.length === 0 && (
+          <tr>
+            <td colSpan={100} className="py-6 text-center">
+              No data
+            </td>
+          </tr>
+        )}
         {loading ? (
           <tr>
             <td colSpan={100} className="py-6 text-center">

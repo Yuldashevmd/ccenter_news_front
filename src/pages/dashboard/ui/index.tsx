@@ -89,7 +89,7 @@ export const DashboardPage = () => {
       </div>
       <AddNewsButton open={open} setEditedData={setEditedData} />
       <DashboardTable
-        rows={data}
+        rows={data || []}
         onDelete={onDelete}
         loading={isLoading}
         setEditedData={setEditedData}

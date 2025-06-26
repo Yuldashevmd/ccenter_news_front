@@ -106,8 +106,8 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
             { label: 'Sana (date)', field: 'date' },
             { label: 'Type *', field: 'type' },
             { label: 'File link', field: 'file_link' },
-            { label: 'Href name', field: 'href_name' },
-            { label: 'Image URL', field: 'img_url' },
+            // { label: 'Href name', field: 'href_name' },
+            // { label: 'Image URL', field: 'img_url' },
           ].map(({ label, field }) => (
             field === 'type' ? (
               <select
