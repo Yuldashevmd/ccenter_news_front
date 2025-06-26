@@ -2,7 +2,7 @@ import { AddNewsButton } from 'features/add-news-button';
 import { Pagination } from 'features/pagination';
 import { useEffect, useState } from 'react';
 import { baseApi } from 'shared/api';
-import { ModalData, useDisclosure, usePaginate } from 'shared/services';
+import { ModalData, Todo, useDisclosure, usePaginate } from 'shared/services';
 import { DashboardTable } from 'widgets/dashboard-table';
 import { Modal } from 'widgets/modal';
 
@@ -11,7 +11,8 @@ export const DashboardPage = () => {
   const { limit, setLimit, total, setTotal } = usePaginate();
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<[] | any>([]);
-  const { createTodo, getTodos, deleteTodo } = baseApi;
+  const [editedData, setEditedData] = useState<undefined | Todo>();
+  const { createTodo, getTodos, deleteTodo, updateTodo } = baseApi;
 
   const GET_ALL = async (params: { limit: number }) => {
     try {
@@ -45,10 +46,18 @@ export const DashboardPage = () => {
 
   const handleSubmit = async (data: ModalData) => {
     try {
-      const res = await createTodo(data);
-      if (res.status === 200) {
-        close();
-        await GET_ALL({ limit });
+      if (editedData) {
+        const res = await updateTodo(editedData.id, data);
+        if (res.status === 200) {
+          close();
+          await GET_ALL({ limit });
+        }
+      } else {
+        const res = await createTodo(data);
+        if (res.status === 200) {
+          close();
+          await GET_ALL({ limit });
+        }
       }
     } catch (e) {
       console.log(e);
@@ -68,10 +77,22 @@ export const DashboardPage = () => {
         </p>
       </div>
       <AddNewsButton open={open} />
-      <DashboardTable rows={data} onDelete={onDelete} loading={isLoading} />
+      <DashboardTable
+        rows={data}
+        onDelete={onDelete}
+        loading={isLoading}
+        setEditedData={setEditedData}
+        open={open}
+      />
       <Pagination total={total} limit={limit} onChange={onLimitChange} />
 
-      <Modal isOpen={isOpen} onClose={close} onSubmit={handleSubmit} loading={isLoading} />
+      <Modal
+        isOpen={isOpen}
+        onClose={close}
+        onSubmit={handleSubmit}
+        loading={isLoading}
+        data={editedData}
+      />
     </main>
   );
 };
