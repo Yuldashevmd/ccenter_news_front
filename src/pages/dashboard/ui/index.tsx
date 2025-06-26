@@ -55,7 +55,7 @@ export const DashboardPage = () => {
         const res = await updateTodo(editedData.id, data);
         if (res.status === 200) {
           close();
-          setEditedData(undefined);
+          // setEditedData(undefined);
           setResponseMsg('News edited successfully');
           await GET_ALL({ limit });
         }
@@ -87,7 +87,7 @@ export const DashboardPage = () => {
           Welcome to the dashboard! Here you can manage your news and other content.
         </p>
       </div>
-      <AddNewsButton open={open} />
+      <AddNewsButton open={open} setEditedData={setEditedData} />
       <DashboardTable
         rows={data}
         onDelete={onDelete}
