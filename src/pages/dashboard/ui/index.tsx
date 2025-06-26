@@ -10,6 +10,7 @@ export const DashboardPage = () => {
   const { isOpen, open, close } = useDisclosure();
   const { limit, setLimit, total, setTotal } = usePaginate();
   const [isLoading, setIsLoading] = useState(false);
+  const [responseMsg, setResponseMsg] = useState<string | undefined>(undefined);
   const [data, setData] = useState<[] | any>([]);
   const [editedData, setEditedData] = useState<undefined | Todo>();
   const { createTodo, getTodos, deleteTodo, updateTodo } = baseApi;
@@ -37,10 +38,14 @@ export const DashboardPage = () => {
     try {
       const res = await deleteTodo(id);
       if (res.status === 200) {
+        setResponseMsg('News deleted successfully');
         await GET_ALL({ limit });
       }
     } catch (e) {
       console.log(e, 'error');
+      setResponseMsg(`Something went wrong-${e}`);
+    } finally {
+      setTimeout(() => setResponseMsg(undefined), 3000);
     }
   };
 
@@ -50,17 +55,23 @@ export const DashboardPage = () => {
         const res = await updateTodo(editedData.id, data);
         if (res.status === 200) {
           close();
+          setEditedData(undefined);
+          setResponseMsg('News edited successfully');
           await GET_ALL({ limit });
         }
       } else {
         const res = await createTodo(data);
         if (res.status === 200) {
           close();
+          setResponseMsg('News created successfully');
           await GET_ALL({ limit });
         }
       }
     } catch (e) {
       console.log(e);
+      setResponseMsg(`Something went wrong-${e}`);
+    } finally {
+      setTimeout(() => setResponseMsg(undefined), 3000);
     }
   };
 
@@ -93,6 +104,17 @@ export const DashboardPage = () => {
         loading={isLoading}
         data={editedData}
       />
+
+      {responseMsg &&
+        (responseMsg.includes('successfully') ? (
+          <p className="fixed bottom-4 right-5 text-green-600 bg-green-100 border border-green-400 rounded-md px-4 py-2">
+            {responseMsg}
+          </p>
+        ) : (
+          <p className="fixed bottom-4 right-5 text-red-600 bg-red-100 border border-red-400 rounded-md px-4 py-2">
+            {responseMsg}
+          </p>
+        ))}
     </main>
   );
 };
