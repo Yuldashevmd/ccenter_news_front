@@ -44,7 +44,7 @@ export const Modal: React.FC<Props> = ({ isOpen, onClose, onSubmit, data, loadin
         label: { en: '', ru: '', uz: '' },
         text: { en: '', ru: '', uz: '' },
         title: { en: '', ru: '', uz: '' },
-        type: '',
+        type: 'news',
       });
     }
   }, [data, isOpen]);
