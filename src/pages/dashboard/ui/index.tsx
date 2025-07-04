@@ -14,7 +14,6 @@ export const DashboardPage = () => {
   const [data, setData] = useState<[] | any>([]);
   const [editedData, setEditedData] = useState<undefined | Todo>();
   const { createTodo, getTodos, deleteTodo, updateTodo } = baseApi;
-
   const GET_ALL = async (params: { limit: number }) => {
     try {
       setIsLoading(true);
@@ -32,6 +31,18 @@ export const DashboardPage = () => {
 
   const onLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
+  };
+
+  const onRowDrop = async (_: number, toIndex: number, id: number) => {
+    const body = {
+      order: toIndex,
+    };
+    const res = await updateTodo(id, body);
+    if (res.status === 200) {
+      close();
+      setResponseMsg('Order changed successfully');
+      await GET_ALL({ limit });
+    }
   };
 
   const onDelete = async (id: number) => {
@@ -94,6 +105,7 @@ export const DashboardPage = () => {
         loading={isLoading}
         setEditedData={setEditedData}
         open={open}
+        onRowDrop={onRowDrop}
       />
       <Pagination total={total} limit={limit} onChange={onLimitChange} />
 

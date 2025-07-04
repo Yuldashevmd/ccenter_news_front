@@ -15,6 +15,7 @@ export interface ModalData {
   text: Multilang;
   title: Multilang;
   type: string;
+  order: number;
 }
 
 export interface Todo extends ModalData {
