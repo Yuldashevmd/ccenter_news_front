@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Pencil, Trash } from 'lucide-react';
 import { FC } from 'react';
 import {  Todo } from 'shared/services';
@@ -50,7 +51,7 @@ export const DashboardTable: FC<IProps> = (props) => {
             <tr key={row.id} className="hover:bg-gray-50 cursor-pointer">
               <td className="px-4 py-2">{row?.title?.uz}</td>
               <td className="px-4 py-2">{row?.type}</td>
-              <td className="px-4 py-2">{row?.date}</td>
+              <td className="px-4 py-2">{row?.date && dayjs(row.date).format('DD.MM.YYYY')}</td>
               <td className="px-4 py-2">
                 <span className="text-blue-600 hover:underline" title="Edit">
                   <Pencil
