@@ -79,7 +79,7 @@ const DraggableRow: FC<{
       <td className="px-4 py-2">{row?.type}</td>
       <td className="px-4 py-2">{row?.date && dayjs(row.date).format('DD.MM.YYYY')}</td>
       <td className="px-4 py-2">
-        <span className="text-blue-600 hover:underline" title="Edit">
+        <span className="text-blue-600 hover:underline cursor-pointer" title="Edit">
           <Pencil
             className="inline w-5 h-5 text-orange-400"
             onClick={() => {
@@ -88,7 +88,7 @@ const DraggableRow: FC<{
             }}
           />
         </span>
-        <span className="text-red-600 hover:underline ml-2" title="Delete">
+        <span className="text-red-600 hover:underline ml-2 cursor-pointer" title="Delete">
           <Trash className="inline w-5 h-5 text-red-400" onClick={() => onDelete(row.id)} />
         </span>
       </td>
