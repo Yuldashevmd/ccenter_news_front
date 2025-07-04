@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { baseApi } from 'shared/api';
 import { ModalData, Todo, useDisclosure, usePaginate } from 'shared/services';
 import { DashboardTable } from 'widgets/dashboard-table';
+import { FileList } from 'widgets/file-list';
 import { Modal } from 'widgets/modal';
 
 export const DashboardPage = () => {
@@ -109,6 +110,8 @@ export const DashboardPage = () => {
       />
       <Pagination total={total} limit={limit} onChange={onLimitChange} />
 
+      <FileList />
+
       <Modal
         isOpen={isOpen}
         onClose={close}
@@ -127,6 +130,7 @@ export const DashboardPage = () => {
             {responseMsg}
           </p>
         ))}
+
     </main>
   );
 };
