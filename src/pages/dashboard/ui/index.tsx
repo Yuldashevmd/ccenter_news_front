@@ -92,7 +92,7 @@ export const DashboardPage = () => {
   }, [limit]);
 
   return (
-    <main className="min-h-full rounded-xl shadow-md max-w-7xl mx-auto mt-24 p-8 bg-white flex flex-col items-center">
+    <main className="min-h-full rounded-xl shadow-md max-w-7xl mx-auto mt-4 sm:mt-24 p-4 sm:p-8 bg-white flex flex-col items-center">
       <div className="flex flex-col items-center mb-8">
         <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">Dashboard</h3>
         <p className="text-center text-gray-600">
