@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { baseApi } from 'shared/api';
 import { ModalData, Todo, useDisclosure, usePaginate } from 'shared/services';
 import { DashboardTable } from 'widgets/dashboard-table';
+import { FileList } from 'widgets/file-list';
 import { Modal } from 'widgets/modal';
 
 export const DashboardPage = () => {
@@ -14,7 +15,6 @@ export const DashboardPage = () => {
   const [data, setData] = useState<[] | any>([]);
   const [editedData, setEditedData] = useState<undefined | Todo>();
   const { createTodo, getTodos, deleteTodo, updateTodo } = baseApi;
-
   const GET_ALL = async (params: { limit: number }) => {
     try {
       setIsLoading(true);
@@ -32,6 +32,18 @@ export const DashboardPage = () => {
 
   const onLimitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setLimit(Number(e.target.value));
+  };
+
+  const onRowDrop = async (_: number, toIndex: number, id: number) => {
+    const body = {
+      order: toIndex,
+    };
+    const res = await updateTodo(id, body);
+    if (res.status === 200) {
+      close();
+      setResponseMsg('Order changed successfully');
+      await GET_ALL({ limit });
+    }
   };
 
   const onDelete = async (id: number) => {
@@ -80,7 +92,7 @@ export const DashboardPage = () => {
   }, [limit]);
 
   return (
-    <main className="min-h-full rounded-xl shadow-md max-w-7xl mx-auto mt-24 p-8 bg-white flex flex-col items-center">
+    <main className="min-h-full rounded-xl shadow-md max-w-7xl mx-auto mt-4 sm:mt-24 p-4 sm:p-8 bg-white flex flex-col items-center">
       <div className="flex flex-col items-center mb-8">
         <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">Dashboard</h3>
         <p className="text-center text-gray-600">
@@ -94,8 +106,11 @@ export const DashboardPage = () => {
         loading={isLoading}
         setEditedData={setEditedData}
         open={open}
+        onRowDrop={onRowDrop}
       />
       <Pagination total={total} limit={limit} onChange={onLimitChange} />
+
+      <FileList />
 
       <Modal
         isOpen={isOpen}
@@ -115,6 +130,7 @@ export const DashboardPage = () => {
             {responseMsg}
           </p>
         ))}
+
     </main>
   );
 };

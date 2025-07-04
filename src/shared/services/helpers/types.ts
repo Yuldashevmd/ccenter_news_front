@@ -15,6 +15,7 @@ export interface ModalData {
   text: Multilang;
   title: Multilang;
   type: string;
+  order: number;
 }
 
 export interface Todo extends ModalData {
@@ -27,4 +28,5 @@ export interface UpdateTodoDto extends Partial<CreateTodoDto> {}
 export interface UploadResponse {
   url: string;
   name?: string;
+  Message?: string;
 }

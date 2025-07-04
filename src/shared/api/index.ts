@@ -39,7 +39,11 @@ export const baseApi = {
     return response;
   },
 
-  async uploadImage(file: File): Promise<UploadResponse> {
+  async getFileList(): Promise<{ status: number; data: {url:string}[] }> {
+    const response = await api.get('/news/images/list');
+    return response;
+  },
+  async uploadFile(file: File): Promise<UploadResponse> {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -50,14 +54,8 @@ export const baseApi = {
     return response.data;
   },
 
-  async uploadFile(file: File): Promise<UploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await api.post<UploadResponse>('/img-upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
-
-    return response.data;
+  async deleteFile(id: string): Promise<{ status: number }> {
+    const response = await api.delete(`/news/image/delete?url=${id}`);
+    return response;
   },
 };
